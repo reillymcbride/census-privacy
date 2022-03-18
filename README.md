@@ -1,3 +1,5 @@
+<h2>Census Reconstruction Baseline: Randomly Generated from Block Distribution Data</h2>
+
 
 **Code for CMSC 33211 Winter 2022 Final Project**
 
