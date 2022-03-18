@@ -1,18 +1,7 @@
-import io
-import pandas as pd
 import numpy as np
-import re
 import csv
 from random import choices, randint
 import matplotlib.pyplot as plt
-
-
-'''
->>> population = [1, 2, 3, 4, 5, 6]
->>> weights = [0.1, 0.05, 0.05, 0.2, 0.4, 0.2]
-Now choices(population, weights) generates a single sample:
-'''
-
 
 def fill_age_opts():
     age_sex_options = {}
@@ -20,11 +9,12 @@ def fill_age_opts():
         reader = csv.DictReader(age_sex_buckets, delimiter=',')
         for row in reader:
             stat = row['ID']
-            age_sex_options[stat] = (row['Sex'], int(row['MinAge'])) #create a tuple
+            age_sex_options[stat] = (row['Sex'], int(row['MinAge']))
     return age_sex_options
 
 
-# take in distribution dictionary & num records that need to be generated. file is age headings first then race headings
+# take in distribution dictionary & num records that need to be generated.
+# file is age headings first then race headings
 def gen_block(dist_dict, age_sex_encodings, calc_stats):
     all_headers = list(dist_dict.keys())
     all_weights = list(dist_dict.values())
@@ -62,17 +52,6 @@ def gen_block(dist_dict, age_sex_encodings, calc_stats):
 
 
 def count_matches(guessed_block, sample_block):
-    #aloni's code:
-    '''
-    num_matches = 0
-    for value in set(sampled_block + guessed_block):
-        num_value_sampled = sum([sample==value for sample in sampled_block])
-        num_value_guessed = sum([guess==value for guess in guessed_block])
-        num_value_match = np.min([num_value_sampled,num_value_guessed])
-        num_matches += num_value_match
-    return num_matches
-    '''
-
     possible_combos = {}
     for record in sample_block:
         combo_key = str(record['sex'][0]) + str(record['age']) + str(record['race'])
@@ -88,8 +67,6 @@ def count_matches(guessed_block, sample_block):
         else:
             possible_combos[combo_key] = [0, 1]
 
-    #print(possible_combos)
-
     count = 0
     for v in possible_combos.values():
         count += min(v)
@@ -99,7 +76,9 @@ def count_matches(guessed_block, sample_block):
 
 def main():
     age_sex_options = fill_age_opts()
-    count = 0 #to do small batches while testing
+
+    count = 0
+
     block_sizes = []
     matches = []
     prop_matches = []
@@ -110,10 +89,7 @@ def main():
         for row in reader:
             count += 1
             if count % 1000 == 0:
-                print(count)
-
-            #if count == 5000:
-            #    break
+                # print(count) #lets you somewhat keep track of progress as it runs
 
             #generate sample pop records
             size = int(row["N"])
@@ -139,8 +115,6 @@ def main():
     sizes_np = np.array(block_sizes)
     prop_matches_np = np.array(prop_matches)
     probs_np = np.array(percent_above_thresh)
-
-    #ref: https://www.statology.org/scatterplot-with-regression-line-python/
 
     plt.plot(sizes_np, prop_matches_np, 'o')
     res = np.polyfit(sizes_np, prop_matches_np, 1)

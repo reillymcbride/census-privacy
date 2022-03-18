@@ -1,41 +1,7 @@
-import io
-import pandas as pd
-import numpy as np
-import re
 import csv
-
-# maybe: generate a dict of blocks? or create a csv that has
-
-
-# for every block in cook county illinois:
-# - total pop
-# - number of people in each age bucket for each sex
-#   - will have to randomly generate w/i age bucket
-# - number of people for each race option
-
-
-# when the csv is read back in main script...
-# for every block:
-#   create a sample set, then a guessed set as follows:
-#   do the following n times, where n is # of people in block:
-#       - randomly pick gender-age pairing (with each pairing having a certain probability?)
-#       - randomly pick race info (with each race option having a certain probability)
-#   count matches between sampled and guessed sets
-#
-# determine avg # of matches?
-# see if there are relationships between tightness of distribution and number of matches
-#   variance and no. of matches? may not rlly make sense tho..  want a measure of like... number of diff
-#   categories w/ significant prob.
-#   maybe # of categories above 0.1 prob or something like that??
-#   can also do as a function of block size
-#
-# also comp. to ruggles ofc
-
-
 
 
 # Calculate age & sex distributions
-
 def calc_distributions(dict, n):
     result = {}
     result["N"] = n
@@ -53,16 +19,7 @@ def calc_distributions(dict, n):
 
 
 
-def generate_distributions():
-    # open both files
-    # blocks should line up so
-    # get next row from age_sex
-    # get next row from race
-    # call calc_age_and_sex on age_sex row
-    # call calc_race on race row
-    # write out a new line to csv that's like: race info, age sex info (no real need to keep block number)
-    #   - store info as probabilities out of 1
-
+def main():
     with open('age_sex_data_2010_cook_county/2010_P12_short_headers.csv', 'r') as age_sex_csv, \
             open('race_data_2010_cook_county/2010_P1_short_headers.csv', 'r') as race_csv, \
             open('output.csv', 'w') as output:
@@ -106,4 +63,4 @@ def generate_distributions():
             csv_writer.writerow(combo)
 
 
-generate_distributions()
+main()
